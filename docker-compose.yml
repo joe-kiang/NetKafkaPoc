@@ -32,6 +32,30 @@ services:
       - "8085:8080"
     depends_on:
       - kafka
+  
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      - TZ=America/Fortaleza
+
+  jaeger:
+    environment:
+      - TZ=America/Fortaleza
+    image: jaegertracing/all-in-one
+    container_name: jaeger
+    ports:
+      - 16686:16686
+      - 16685:16685
+      - 14268:14268
+      - 14250:14250
+      - 14317:4317
+      - 9411:9411
 
   kafkapoc-api:
     build:
